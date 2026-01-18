@@ -1,0 +1,32 @@
+---
+const { pathname } = Astro.url;
+
+const links = [
+  { href: '/', label: 'About' },
+  { href: '/films', label: 'Films' },
+  { href: '/photos', label: 'Photos' },
+  { href: '/stills', label: 'Stills' },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-white/5">
+  <div class="container flex items-center justify-between h-16">
+    <a href="/" class="text-lg font-medium hover:text-white">Portfolio</a>
+
+    <ul class="flex items-center gap-8">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'text-sm hover:text-white transition-colors',
+              pathname === link.href ? 'text-white' : 'text-muted',
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

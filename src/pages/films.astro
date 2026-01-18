@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FilmCard from '../components/FilmCard.astro';
+import { getCollection } from 'astro:content';
+
+const films = await getCollection('films');
+const sortedFilms = films.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Films | Portfolio">
+  <section class="py-12 md:py-20">
+    <div class="container">
+      <h1 class="text-3xl md:text-4xl font-medium mb-4">Films</h1>
+      <p class="text-muted max-w-2xl">
+        A collection of short films, documentaries, and visual projects.
+      </p>
+    </div>
+  </section>
+
+  <div class="divide-y divide-white/5">
+    {sortedFilms.map((film, index) => (
+      <FilmCard
+        id={film.id}
+        title={film.data.title}
+        description={film.data.description}
+        youtubeId={film.data.youtubeId}
+        thumbnail={film.data.thumbnail}
+        reverse={index % 2 === 1}
+      />
+    ))}
+  </div>
+
+  {sortedFilms.length === 0 && (
+    <div class="container py-20 text-center text-muted">
+      <p>No films yet. Add films to src/content/films/</p>
+    </div>
+  )}
+</BaseLayout>

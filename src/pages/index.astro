@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const featuredImages = [
+  '/images/about/featured-1.svg',
+  '/images/about/featured-2.svg',
+  '/images/about/featured-3.svg',
+  '/images/about/featured-4.svg',
+  '/images/about/featured-5.svg',
+  '/images/about/featured-6.svg',
+];
+---
+
+<BaseLayout title="About | Portfolio">
+  <section class="min-h-[80vh] flex items-center">
+    <div class="container py-20">
+      <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+        <div class="space-y-6">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight">
+            Filmmaker &<br />Photographer
+          </h1>
+          <p class="text-lg text-muted leading-relaxed max-w-md">
+            I create visual stories that capture emotion and authenticity.
+            With a focus on documentary-style filmmaking and candid photography,
+            I bring moments to life through thoughtful composition and natural light.
+          </p>
+          <div class="flex gap-4 pt-4">
+            <a href="/films" class="text-sm text-muted hover:text-white transition-colors">
+              View Films &rarr;
+            </a>
+            <a href="/photos" class="text-sm text-muted hover:text-white transition-colors">
+              View Photos &rarr;
+            </a>
+          </div>
+        </div>
+        <div class="aspect-[4/5] bg-white/5 rounded-lg overflow-hidden">
+          <img
+            src="/images/about/profile.svg"
+            alt="Portrait"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 border-t border-white/5">
+    <div class="container">
+      <h2 class="text-2xl font-medium mb-12">Featured Work</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {featuredImages.map((src, index) => (
+          <div class="aspect-[4/3] bg-white/5 rounded-lg overflow-hidden">
+            <img
+              src={src}
+              alt={`Featured work ${index + 1}`}
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

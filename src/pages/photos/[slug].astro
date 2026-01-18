@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PhotoViewer from '../../components/PhotoViewer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+  return albums.map((album) => ({
+    params: { slug: album.id },
+    props: { album },
+  }));
+}
+
+const { album } = Astro.props;
+---
+
+<BaseLayout title={`${album.data.title} | Photos | Portfolio`}>
+  <section class="py-12 md:py-20">
+    <div class="container">
+      <a href="/photos" class="text-sm text-muted hover:text-white transition-colors mb-4 inline-block">
+        &larr; Back to Albums
+      </a>
+      <h1 class="text-3xl md:text-4xl font-medium">{album.data.title}</h1>
+    </div>
+  </section>
+
+  <section class="pb-20">
+    <PhotoViewer photos={album.data.photos} />
+  </section>
+</BaseLayout>

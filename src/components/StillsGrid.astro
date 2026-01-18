@@ -1,0 +1,28 @@
+---
+interface Still {
+  src: string;
+  filmSlug: string;
+}
+
+interface Props {
+  stills: Still[];
+}
+
+const { stills } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  {stills.map((still) => (
+    <a
+      href={`/films#${still.filmSlug}`}
+      class="group block aspect-[16/9] bg-white/5 rounded-lg overflow-hidden"
+    >
+      <img
+        src={still.src}
+        alt={`Still from ${still.filmSlug}`}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        loading="lazy"
+      />
+    </a>
+  ))}
+</div>

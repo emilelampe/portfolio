@@ -1,0 +1,136 @@
+---
+interface Photo {
+  src: string;
+  date: string;
+  caption: string;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<div class="photo-viewer" data-photos={JSON.stringify(photos)}>
+  <div class="photo-scroll h-[70vh] gap-4 px-6 md:px-8">
+    {photos.map((photo, index) => (
+      <div
+        class="photo-item flex-shrink-0 h-full cursor-pointer"
+        data-index={index}
+      >
+        <img
+          src={photo.src}
+          alt={photo.caption}
+          class="h-full w-auto object-contain rounded-lg"
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+      </div>
+    ))}
+  </div>
+
+  <div class="container mt-8">
+    <div class="flex items-center justify-between">
+      <div class="photo-info">
+        <p class="text-sm text-muted photo-date">{photos[0]?.date || ''}</p>
+        <p class="text-foreground photo-caption">{photos[0]?.caption || ''}</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <button
+          class="photo-prev p-2 text-muted hover:text-white transition-colors disabled:opacity-30"
+          aria-label="Previous photo"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <span class="text-sm text-muted">
+          <span class="photo-current">1</span> / {photos.length}
+        </span>
+        <button
+          class="photo-next p-2 text-muted hover:text-white transition-colors disabled:opacity-30"
+          aria-label="Next photo"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const viewer = document.querySelector('.photo-viewer');
+    if (!viewer) return;
+
+    const photos = JSON.parse(viewer.dataset.photos || '[]');
+    const scroll = viewer.querySelector('.photo-scroll');
+    const items = viewer.querySelectorAll('.photo-item');
+    const dateEl = viewer.querySelector('.photo-date');
+    const captionEl = viewer.querySelector('.photo-caption');
+    const currentEl = viewer.querySelector('.photo-current');
+    const prevBtn = viewer.querySelector('.photo-prev');
+    const nextBtn = viewer.querySelector('.photo-next');
+
+    let currentIndex = 0;
+
+    function updateInfo(index: number) {
+      currentIndex = index;
+      if (dateEl) dateEl.textContent = photos[index]?.date || '';
+      if (captionEl) captionEl.textContent = photos[index]?.caption || '';
+      if (currentEl) currentEl.textContent = String(index + 1);
+      if (prevBtn) (prevBtn as HTMLButtonElement).disabled = index === 0;
+      if (nextBtn) (nextBtn as HTMLButtonElement).disabled = index === photos.length - 1;
+    }
+
+    function scrollToIndex(index: number) {
+      const item = items[index];
+      if (item && scroll) {
+        item.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        updateInfo(index);
+      }
+    }
+
+    // Click navigation
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => scrollToIndex(index));
+    });
+
+    // Button navigation
+    prevBtn?.addEventListener('click', () => {
+      if (currentIndex > 0) scrollToIndex(currentIndex - 1);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      if (currentIndex < photos.length - 1) scrollToIndex(currentIndex + 1);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && currentIndex > 0) {
+        scrollToIndex(currentIndex - 1);
+      } else if (e.key === 'ArrowRight' && currentIndex < photos.length - 1) {
+        scrollToIndex(currentIndex + 1);
+      }
+    });
+
+    // Detect scroll position changes
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    scroll?.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const scrollLeft = scroll.scrollLeft;
+        const scrollWidth = scroll.scrollWidth - scroll.clientWidth;
+        const progress = scrollLeft / scrollWidth;
+        const newIndex = Math.round(progress * (photos.length - 1));
+        if (newIndex !== currentIndex) {
+          updateInfo(newIndex);
+        }
+      }, 50);
+    });
+
+    updateInfo(0);
+  });
+</script>
