@@ -14,18 +14,19 @@ const films = defineCollection({
 
 const albums = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/albums' }),
-  schema: z.object({
-    title: z.string(),
-    cover: z.string(),
-    order: z.number(),
-    photos: z.array(
-      z.object({
-        src: z.string(),
-        date: z.string(),
-        caption: z.string(),
-      })
-    ),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      cover: image(),
+      order: z.number(),
+      photos: z.array(
+        z.object({
+          src: image(),
+          date: z.string(),
+          caption: z.string(),
+        })
+      ),
+    }),
 });
 
 const stills = defineCollection({

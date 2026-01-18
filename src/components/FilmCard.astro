@@ -6,17 +6,18 @@ interface Props {
   youtubeId: string;
   thumbnail: string;
   reverse?: boolean;
+  index?: number;
 }
 
-const { id, title, description, youtubeId, thumbnail, reverse = false } = Astro.props;
+const { id, title, description, youtubeId, thumbnail, reverse = false, index = 1 } = Astro.props;
 ---
 
-<article id={id} class="py-16 md:py-24">
+<article id={id} class="py-16 md:py-24 border-b border-white/5">
   <div class:list={[
-    "container grid md:grid-cols-2 gap-8 md:gap-12 items-center",
+    "container grid md:grid-cols-12 gap-8 md:gap-12 items-center",
     reverse && "md:[direction:rtl]"
   ]}>
-    <div class="aspect-video bg-white/5 rounded-lg overflow-hidden md:[direction:ltr]">
+    <div class="md:col-span-7 aspect-video bg-white/5 rounded overflow-hidden md:[direction:ltr]">
       <iframe
         width="100%"
         height="100%"
@@ -29,8 +30,10 @@ const { id, title, description, youtubeId, thumbnail, reverse = false } = Astro.
         class="w-full h-full"
       ></iframe>
     </div>
-    <div class="space-y-4 md:[direction:ltr]">
-      <h2 class="text-2xl md:text-3xl font-medium">{title}</h2>
+    <div class="md:col-span-4 space-y-4 md:[direction:ltr]">
+      <span class="label">{String(index).padStart(2, '0')}</span>
+      <h2 class="text-2xl md:text-3xl">{title}</h2>
+      <div class="accent-line"></div>
       <p class="text-muted leading-relaxed">{description}</p>
     </div>
   </div>

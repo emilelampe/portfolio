@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
-  <rect width="1200" height="800" fill="#1a1a1a"/>
-  <rect x="450" y="250" width="300" height="300" rx="8" fill="#2a2a2a"/>
-  <text x="600" y="620" text-anchor="middle" fill="#666" font-family="system-ui" font-size="24">Valley Fog</text>
-</svg>

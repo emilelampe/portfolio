@@ -7,7 +7,12 @@
       "Bash(npm run build:*)",
       "Bash(git config:*)",
       "Bash(ssh:*)",
-      "Bash(ssh-add:*)"
+      "Bash(ssh-add:*)",
+      "WebSearch",
+      "WebFetch(domain:nemanjamitic.com)",
+      "WebFetch(domain:jankraus.net)",
+      "WebFetch(domain:www.launchfa.st)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

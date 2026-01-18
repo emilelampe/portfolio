@@ -9,18 +9,22 @@ const links = [
 ];
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-white/5">
-  <div class="container flex items-center justify-between h-16">
-    <a href="/" class="text-lg font-medium hover:text-white">Portfolio</a>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
+  <div class="container flex items-center justify-between h-16 border-b border-white/5">
+    <a href="/" class="font-serif text-xl tracking-tight hover:text-accent transition-colors">
+      Emile Lampe
+    </a>
 
-    <ul class="flex items-center gap-8">
+    <ul class="flex items-center gap-6 md:gap-8">
       {links.map((link) => (
         <li>
           <a
             href={link.href}
             class:list={[
-              'text-sm hover:text-white transition-colors',
-              pathname === link.href ? 'text-white' : 'text-muted',
+              'text-sm tracking-wide hover:text-accent transition-colors',
+              pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+                ? 'text-foreground'
+                : 'text-muted',
             ]}
           >
             {link.label}

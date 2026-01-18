@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Image, getImage } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+
+  const paths = albums.flatMap((album) =>
+    album.data.photos.map((photo, index) => ({
+      params: {
+        album: album.id,
+        photo: String(index + 1),
+      },
+      props: {
+        album,
+        photoIndex: index,
+        photo,
+        totalPhotos: album.data.photos.length,
+      },
+    }))
+  );
+
+  return paths;
+}
+
+const { album, photoIndex, photo, totalPhotos } = Astro.props;
+const { album: albumSlug, photo: photoNum } = Astro.params;
+
+const currentIndex = photoIndex;
+const prevIndex = currentIndex > 0 ? currentIndex : null;
+const nextIndex = currentIndex < totalPhotos - 1 ? currentIndex + 2 : null;
+
+// Pre-generate optimized image for the main display
+const optimizedMain = await getImage({
+  src: photo.src,
+  width: 1600,
+  quality: 85,
+});
+---
+
+<BaseLayout title={`${photo.caption} | ${album.data.title} | Emile Lampe`}>
+  <div class="h-[calc(100vh-4rem)] flex flex-col overflow-hidden">
+    <!-- Header bar -->
+    <div class="flex-shrink-0 h-12 flex items-center border-b border-white/5">
+      <div class="container flex items-center justify-between">
+        <a href="/photos" class="label hover:text-accent transition-colors">
+          &larr; Albums
+        </a>
+        <span class="font-serif">{album.data.title}</span>
+        <span class="label">{currentIndex + 1} / {totalPhotos}</span>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="flex-1 flex min-h-0">
+      <!-- Photo area -->
+      <div class="flex-1 flex items-center justify-center p-4 md:p-8 relative">
+        <img
+          src={optimizedMain.src}
+          alt={photo.caption}
+          class="max-w-full max-h-full object-contain"
+          transition:name={`photo-${albumSlug}-${photoNum}`}
+        />
+
+        <!-- Prev/Next click areas -->
+        {prevIndex !== null && (
+          <a
+            href={`/photos/${albumSlug}/${prevIndex}`}
+            class="absolute left-0 top-0 bottom-0 w-1/3 flex items-center justify-start pl-4 group"
+            aria-label="Previous photo"
+          >
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded-full p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </span>
+          </a>
+        )}
+        {nextIndex !== null && (
+          <a
+            href={`/photos/${albumSlug}/${nextIndex}`}
+            class="absolute right-0 top-0 bottom-0 w-1/3 flex items-center justify-end pr-4 group"
+            aria-label="Next photo"
+          >
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded-full p-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </span>
+          </a>
+        )}
+      </div>
+
+      <!-- Side panel with info -->
+      <div class="hidden md:flex flex-col w-64 border-l border-white/5 p-6">
+        <div class="flex-1">
+          <p class="label mb-2">Date</p>
+          <p class="mb-6">{photo.date}</p>
+
+          <p class="label mb-2">Caption</p>
+          <p class="text-muted leading-relaxed">{photo.caption}</p>
+        </div>
+
+        <div class="flex justify-between">
+          {prevIndex !== null ? (
+            <a href={`/photos/${albumSlug}/${prevIndex}`} class="label hover:text-accent transition-colors">
+              &larr; Prev
+            </a>
+          ) : (
+            <span class="label text-muted/30">&larr; Prev</span>
+          )}
+          {nextIndex !== null ? (
+            <a href={`/photos/${albumSlug}/${nextIndex}`} class="label hover:text-accent transition-colors">
+              Next &rarr;
+            </a>
+          ) : (
+            <span class="label text-muted/30">Next &rarr;</span>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Thumbnail strip -->
+    <div class="flex-shrink-0 h-20 border-t border-white/5 flex items-center">
+      <div class="container">
+        <div class="flex gap-2 overflow-x-auto">
+          {album.data.photos.map((thumb, index) => (
+            <a
+              href={`/photos/${albumSlug}/${index + 1}`}
+              class:list={[
+                "flex-shrink-0 w-14 h-10 md:w-16 md:h-12 rounded overflow-hidden transition-opacity",
+                index === currentIndex ? "ring-1 ring-accent opacity-100" : "opacity-40 hover:opacity-70"
+              ]}
+            >
+              <Image
+                src={thumb.src}
+                alt=""
+                class="w-full h-full object-cover"
+                width={64}
+                height={48}
+                quality={70}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile info bar (shown below thumbnails on mobile) -->
+    <div class="md:hidden flex-shrink-0 border-t border-white/5 p-4">
+      <p class="label mb-1">{photo.date}</p>
+      <p class="text-sm text-muted">{photo.caption}</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    const prevLink = document.querySelector('a[aria-label="Previous photo"]') as HTMLAnchorElement;
+    const nextLink = document.querySelector('a[aria-label="Next photo"]') as HTMLAnchorElement;
+
+    if (e.key === 'ArrowLeft' && prevLink) {
+      prevLink.click();
+    } else if (e.key === 'ArrowRight' && nextLink) {
+      nextLink.click();
+    } else if (e.key === 'Escape') {
+      window.location.href = '/photos';
+    }
+  });
+</script>
+
+<style>
+  /* Hide footer on this page */
+  :global(footer) {
+    display: none;
+  }
+</style>

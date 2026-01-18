@@ -11,18 +11,19 @@ interface Props {
 const { stills } = Astro.props;
 ---
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
   {stills.map((still) => (
     <a
       href={`/films#${still.filmSlug}`}
-      class="group block aspect-[16/9] bg-white/5 rounded-lg overflow-hidden"
+      class="group block aspect-[16/9] bg-white/5 rounded overflow-hidden relative"
     >
       <img
         src={still.src}
         alt={`Still from ${still.filmSlug}`}
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
         loading="lazy"
       />
+      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
     </a>
   ))}
 </div>

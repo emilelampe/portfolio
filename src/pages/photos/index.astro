@@ -1,38 +1,55 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import AlbumCard from '../../components/AlbumCard.astro';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 const albums = await getCollection('albums');
 const sortedAlbums = albums.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Photos | Portfolio">
-  <section class="py-12 md:py-20">
+<BaseLayout title="Photos | Emile Lampe">
+  <section class="min-h-screen py-20 md:py-32">
     <div class="container">
-      <h1 class="text-3xl md:text-4xl font-medium mb-4">Photos</h1>
-      <p class="text-muted max-w-2xl">
-        Browse through curated photo albums from various projects and travels.
-      </p>
-    </div>
-  </section>
+      <div class="mb-16 md:mb-24">
+        <p class="label mb-4">Photo Albums</p>
+        <h1 class="text-4xl md:text-5xl mb-6">Photos</h1>
+        <div class="accent-line"></div>
+      </div>
 
-  <section class="pb-20">
-    <div class="container">
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sortedAlbums.map((album) => (
-          <AlbumCard
-            slug={album.id}
-            title={album.data.title}
-            cover={album.data.cover}
-          />
+      <div class="space-y-20 md:space-y-32">
+        {sortedAlbums.map((album, index) => (
+          <a
+            href={`/photos/${album.id}/1`}
+            class="group grid md:grid-cols-12 gap-8 md:gap-12 items-center"
+          >
+            <div class="md:col-span-6 aspect-[4/3] rounded overflow-hidden">
+              <Image
+                src={album.data.cover}
+                alt={album.data.title}
+                class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                widths={[600, 900, 1200]}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={85}
+              />
+            </div>
+            <div class="md:col-span-5 md:col-start-8">
+              <span class="label block mb-3">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h2 class="text-3xl md:text-4xl mb-4 group-hover:text-accent transition-colors">
+                {album.data.title}
+              </h2>
+              <div class="accent-line mb-4"></div>
+              <p class="text-muted">
+                {album.data.photos.length} photos
+              </p>
+            </div>
+          </a>
         ))}
       </div>
 
       {sortedAlbums.length === 0 && (
-        <div class="py-20 text-center text-muted">
-          <p>No albums yet. Add albums to src/content/albums/</p>
-        </div>
+        <p class="text-muted py-8">No albums yet.</p>
       )}
     </div>
   </section>

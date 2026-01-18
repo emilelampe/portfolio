@@ -5,11 +5,17 @@ export default {
     extend: {
       colors: {
         background: '#0a0a0a',
-        foreground: '#f5f5f5',
-        muted: '#888888',
+        foreground: '#e8e4df',
+        muted: '#6b6560',
+        accent: '#c4b5a4',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'monospace'],
+      },
+      letterSpacing: {
+        'widest': '0.2em',
       },
     },
   },
