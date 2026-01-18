@@ -4,12 +4,11 @@ interface Props {
   title: string;
   description: string;
   youtubeId: string;
-  thumbnail: string;
   reverse?: boolean;
   index?: number;
 }
 
-const { id, title, description, youtubeId, thumbnail, reverse = false, index = 1 } = Astro.props;
+const { id, title, description, youtubeId, reverse = false, index = 1 } = Astro.props;
 ---
 
 <article id={id} class="py-16 md:py-24 border-b border-white/5">

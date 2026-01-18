@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
-  <rect width="1920" height="1080" fill="#1a1a1a"/>
-  <circle cx="960" cy="540" r="60" fill="#2a2a2a"/>
-  <polygon points="945,510 945,570 990,540" fill="#444"/>
-  <text x="960" y="680" text-anchor="middle" fill="#666" font-family="system-ui" font-size="32">Beneath the Surface</text>
-</svg>

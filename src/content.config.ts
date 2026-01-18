@@ -7,7 +7,6 @@ const films = defineCollection({
     title: z.string(),
     description: z.string(),
     youtubeId: z.string(),
-    thumbnail: z.string(),
     order: z.number(),
   }),
 });
@@ -31,10 +30,11 @@ const albums = defineCollection({
 
 const stills = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/stills' }),
-  schema: z.object({
-    filmSlug: z.string(),
-    images: z.array(z.string()),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      filmSlug: z.string(),
+      images: z.array(image()),
+    }),
 });
 
 export const collections = { films, albums, stills };

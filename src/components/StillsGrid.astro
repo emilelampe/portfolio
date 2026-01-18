@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Still {
-  src: string;
+  src: ImageMetadata;
   filmSlug: string;
 }
 
@@ -15,13 +17,15 @@ const { stills } = Astro.props;
   {stills.map((still) => (
     <a
       href={`/films#${still.filmSlug}`}
-      class="group block aspect-[16/9] bg-white/5 rounded overflow-hidden relative"
+      class="group block aspect-[16/9] rounded overflow-hidden relative"
     >
-      <img
+      <Image
         src={still.src}
         alt={`Still from ${still.filmSlug}`}
         class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-        loading="lazy"
+        widths={[400, 600, 800]}
+        sizes="(max-width: 768px) 100vw, 33vw"
+        quality={80}
       />
       <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
     </a>
