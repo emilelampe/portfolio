@@ -3,18 +3,20 @@ filmSlug: "winter-in-amsterdam"
 images:
   - ../../assets/stills/still-korea-tunnel.jpg
   - ../../assets/stills/still-goat.jpg
+  - ../../assets/stills/still-vespucci.jpg
   - ../../assets/stills/still-seagull.jpg
   - ../../assets/stills/still-bridge.jpg
   - ../../assets/stills/still-rali-boat.jpg
   - ../../assets/stills/still-man-walking-snow.jpg
+  - ../../assets/stills/still-boat-water.jpg
   - ../../assets/stills/still-korea-man-dog.jpg
   - ../../assets/stills/still-ducks.jpg
   - ../../assets/stills/still-rali-korea-hill.jpg
   - ../../assets/stills/still-winter-dog.jpg
+  - ../../assets/stills/still-lights-rooms-2.jpg
   - ../../assets/stills/still-scene.jpg
   - ../../assets/stills/still-snow-bridge.jpg
   - ../../assets/stills/still-girl-in-snow.jpg
   - ../../assets/stills/still-rali-windmill.jpg
-  - ../../assets/stills/still-boat.jpg
   - ../../assets/stills/still-rali-building.jpg
 ---
