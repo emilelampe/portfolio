@@ -8,9 +8,9 @@ const sortedAlbums = albums.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <BaseLayout title="Photos | Emile Lampe">
-  <section class="min-h-screen py-20 md:py-32">
+  <section class="min-h-screen py-12 md:py-16 pb-24">
     <div class="container">
-      <div class="mb-16 md:mb-24">
+      <div class="max-w-2xl mb-12">
         <p class="label mb-4">Photo Albums</p>
         <h1 class="text-4xl md:text-5xl mb-6">Photos</h1>
         <div class="accent-line"></div>
@@ -22,7 +22,7 @@ const sortedAlbums = albums.sort((a, b) => a.data.order - b.data.order);
             href={`/photos/${album.id}/1`}
             class="group grid md:grid-cols-12 gap-8 md:gap-12 items-center"
           >
-            <div class="md:col-span-6 aspect-[4/3] rounded overflow-hidden">
+            <div class="md:col-span-5 aspect-[4/3] rounded overflow-hidden">
               <Image
                 src={album.data.cover}
                 alt={album.data.title}
