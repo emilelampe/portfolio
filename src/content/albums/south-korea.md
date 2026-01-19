@@ -1,7 +1,7 @@
 ---
 title: "South Korea"
 cover: ../../assets/photos/south-korea/women-in-street.jpg
-order: 1
+order: 2
 photos:
   - src: ../../assets/photos/south-korea/women-in-street.jpg
     date: "September 2024"
