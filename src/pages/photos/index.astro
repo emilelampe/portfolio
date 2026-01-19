@@ -16,13 +16,13 @@ const sortedAlbums = albums.sort((a, b) => a.data.order - b.data.order);
         <div class="accent-line"></div>
       </div>
 
-      <div class="space-y-20 md:space-y-32">
+      <div class="space-y-16 md:space-y-24">
         {sortedAlbums.map((album, index) => (
           <a
             href={`/photos/${album.id}/1`}
             class="group grid md:grid-cols-12 gap-8 md:gap-12 items-center"
           >
-            <div class="md:col-span-5 aspect-[4/3] rounded overflow-hidden">
+            <div class="md:col-span-4 aspect-[4/3] rounded overflow-hidden">
               <Image
                 src={album.data.cover}
                 alt={album.data.title}
@@ -32,7 +32,7 @@ const sortedAlbums = albums.sort((a, b) => a.data.order - b.data.order);
                 quality={85}
               />
             </div>
-            <div class="md:col-span-5 md:col-start-8">
+            <div class="md:col-span-5 md:col-start-6">
               <span class="label block mb-3">
                 {String(index + 1).padStart(2, '0')}
               </span>
