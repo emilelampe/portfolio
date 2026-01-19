@@ -7,7 +7,8 @@ export default {
         background: '#0a0a0a',
         foreground: '#e8e4df',
         muted: '#6b6560',
-        accent: '#d2c7be',
+        link: '#d2c7be',
+        accent: '#e8e4df',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
