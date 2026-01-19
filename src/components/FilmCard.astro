@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { id, title, description, youtubeId, reverse = false, index = 1 } = Astro.props;
+const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
 ---
 
 <article id={id} class="grid md:grid-cols-12 gap-8 items-center">
@@ -21,33 +22,37 @@ const { id, title, description, youtubeId, reverse = false, index = 1 } = Astro.
           <p class="text-muted leading-relaxed">{description}</p>
         </div>
         <div class="md:col-span-7 md:col-start-6 aspect-video bg-white/5 rounded overflow-hidden order-1 md:order-2">
-          <iframe
-            width="100%"
-            height="100%"
-            src={`https://www.youtube.com/embed/${youtubeId}`}
-            title={title}
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-            class="w-full h-full"
-          ></iframe>
+          <div class="lite-youtube" data-youtube-id={youtubeId} data-title={title} >
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              class="lite-youtube-thumb"
+              loading="lazy"
+            />
+            <button class="play-button" aria-label={`Play ${title}`}>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="9.5,7.5 16.5,12 9.5,16.5" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </>
     ) : (
       <>
         <div class="md:col-span-7 md:col-start-1 aspect-video bg-white/5 rounded overflow-hidden">
-          <iframe
-            width="100%"
-            height="100%"
-            src={`https://www.youtube.com/embed/${youtubeId}`}
-            title={title}
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-            class="w-full h-full"
-          ></iframe>
+          <div class="lite-youtube" data-youtube-id={youtubeId} data-title={title} >
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              class="lite-youtube-thumb"
+              loading="lazy"
+            />
+            <button class="play-button" aria-label={`Play ${title}`}>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="9.5,7.5 16.5,12 9.5,16.5" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="md:col-span-4 md:col-start-9 space-y-4">
           <span class="label">{String(index).padStart(2, '0')}</span>
@@ -58,3 +63,86 @@ const { id, title, description, youtubeId, reverse = false, index = 1 } = Astro.
       </>
     )}
 </article>
+
+<style>
+  .lite-youtube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .lite-youtube-thumb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  .lite-youtube:hover .lite-youtube-thumb {
+    transform: translate(-50%, -50%) scale(1.02);
+    filter: brightness(0.85);
+  }
+
+  .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    border: 2px solid #d2c7be;
+    border-radius: 50%;
+    background: transparent;
+    color: #d2c7be;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .play-button svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .lite-youtube:hover .play-button {
+    background: #d2c7be;
+    color: #0a0a0a;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .lite-youtube iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.lite-youtube').forEach(container => {
+    container.addEventListener('click', function() {
+      const youtubeId = this.dataset.youtubeId;
+      const title = this.dataset.title;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+      iframe.title = title;
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;';
+      this.innerHTML = '';
+      this.appendChild(iframe);
+    });
+  });
+</script>
