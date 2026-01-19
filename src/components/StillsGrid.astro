@@ -11,23 +11,131 @@ interface Props {
 }
 
 const { stills } = Astro.props;
+
+// Justified gallery algorithm
+// Target row height (will be adjusted to fill width)
+// Smaller value = more images per row (allows 4+ per row)
+const targetRowHeight = 200;
+const gap = 8; // Gap between images in pixels
+const containerWidth = 1200; // Approximate container width for calculation
+
+interface LayoutImage {
+  still: Still;
+  aspectRatio: number;
+  width: number;
+  height: number;
+}
+
+interface Row {
+  images: LayoutImage[];
+  height: number;
+}
+
+// Calculate aspect ratios
+const imagesWithRatio: LayoutImage[] = stills.map((still) => ({
+  still,
+  aspectRatio: still.src.width / still.src.height,
+  width: 0,
+  height: 0,
+}));
+
+// Pack images into rows
+const rows: Row[] = [];
+let currentRow: LayoutImage[] = [];
+let currentRowWidth = 0;
+
+for (const img of imagesWithRatio) {
+  const imgWidthAtTargetHeight = targetRowHeight * img.aspectRatio;
+
+  // Check if adding this image would exceed container width
+  const gapWidth = currentRow.length > 0 ? gap : 0;
+  if (currentRowWidth + imgWidthAtTargetHeight + gapWidth > containerWidth && currentRow.length > 0) {
+    // Finalize current row - calculate actual height to fill width
+    const totalGapWidth = (currentRow.length - 1) * gap;
+    const availableWidth = containerWidth - totalGapWidth;
+    const totalAspectRatio = currentRow.reduce((sum, i) => sum + i.aspectRatio, 0);
+    const rowHeight = availableWidth / totalAspectRatio;
+
+    // Set dimensions for each image in the row
+    currentRow.forEach((rowImg) => {
+      rowImg.width = rowHeight * rowImg.aspectRatio;
+      rowImg.height = rowHeight;
+    });
+
+    rows.push({ images: currentRow, height: rowHeight });
+    currentRow = [];
+    currentRowWidth = 0;
+  }
+
+  currentRow.push(img);
+  currentRowWidth += imgWidthAtTargetHeight + (currentRow.length > 1 ? gap : 0);
+}
+
+// Handle last row (don't stretch if only a few images)
+if (currentRow.length > 0) {
+  const totalGapWidth = (currentRow.length - 1) * gap;
+  const availableWidth = containerWidth - totalGapWidth;
+  const totalAspectRatio = currentRow.reduce((sum, i) => sum + i.aspectRatio, 0);
+
+  // For last row, use target height if it would make images too large
+  const calculatedHeight = availableWidth / totalAspectRatio;
+  const rowHeight = Math.min(calculatedHeight, targetRowHeight * 1.2);
+
+  currentRow.forEach((rowImg) => {
+    rowImg.width = rowHeight * rowImg.aspectRatio;
+    rowImg.height = rowHeight;
+  });
+
+  rows.push({ images: currentRow, height: rowHeight });
+}
 ---
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-  {stills.map((still) => (
-    <a
-      href={`/films#${still.filmSlug}`}
-      class="group block aspect-[16/9] rounded overflow-hidden relative"
-    >
-      <Image
-        src={still.src}
-        alt={`Still from ${still.filmSlug}`}
-        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-        widths={[400, 600, 800]}
-        sizes="(max-width: 768px) 100vw, 33vw"
-        quality={80}
-      />
-      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-    </a>
+<div class="stills-mosaic">
+  {rows.map((row) => (
+    <div class="stills-row" style={`height: ${row.height}px; gap: ${gap}px;`}>
+      {row.images.map((img) => (
+        <a
+          href={`/films#${img.still.filmSlug}`}
+          class="group block rounded overflow-hidden relative"
+          style={`flex: ${img.aspectRatio};`}
+        >
+          <Image
+            src={img.still.src}
+            alt={`Still from ${img.still.filmSlug}`}
+            class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+            widths={[400, 600, 800]}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={80}
+          />
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+        </a>
+      ))}
+    </div>
   ))}
 </div>
+
+<style>
+  .stills-mosaic {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stills-row {
+    display: flex;
+    width: 100%;
+  }
+
+  /* On mobile, stack images vertically */
+  @media (max-width: 768px) {
+    .stills-row {
+      flex-direction: column;
+      height: auto !important;
+    }
+
+    .stills-row > a {
+      flex: none !important;
+      aspect-ratio: auto;
+    }
+  }
+</style>
