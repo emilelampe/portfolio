@@ -55,7 +55,7 @@ const optimizedMain = await getImage({
     <!-- Main content area -->
     <div class="flex-1 flex min-h-0">
       <!-- Photo area -->
-      <div class="flex-1 flex items-center justify-center p-4 md:p-8 relative">
+      <div class="flex-1 flex items-center justify-center p-2 md:p-8 relative">
         <img
           src={optimizedMain.src}
           alt={photo.caption}
@@ -128,15 +128,21 @@ const optimizedMain = await getImage({
       </div>
     </div>
 
+    <!-- Mobile info bar (shown above thumbnails on mobile) -->
+    <div class="md:hidden flex-shrink-0 border-t border-white/5 px-4 py-2">
+      <p class="text-sm text-muted">{photo.date}{photo.location && ` · ${photo.location}`}</p>
+      <p class="text-sm text-muted">{photo.caption}</p>
+    </div>
+
     <!-- Thumbnail strip -->
-    <div class="flex-shrink-0 h-20 border-t border-white/5 flex items-center">
+    <div class="flex-shrink-0 h-16 md:h-20 border-t border-white/5 flex items-center">
       <div class="container">
         <div class="flex gap-2 overflow-x-auto">
           {album.data.photos.map((thumb, index) => (
             <a
               href={`/photos/${albumSlug}/${index + 1}`}
               class:list={[
-                "flex-shrink-0 w-14 h-10 md:w-16 md:h-12 rounded overflow-hidden transition-opacity",
+                "flex-shrink-0 w-12 h-9 md:w-16 md:h-12 rounded overflow-hidden transition-opacity",
                 index === currentIndex ? "ring-1 ring-accent opacity-100" : "opacity-40 hover:opacity-70"
               ]}
             >
@@ -152,13 +158,6 @@ const optimizedMain = await getImage({
           ))}
         </div>
       </div>
-    </div>
-
-    <!-- Mobile info bar (shown below thumbnails on mobile) -->
-    <div class="md:hidden flex-shrink-0 border-t border-white/5 p-4">
-      <p class="text-sm text-muted mb-1">{photo.date}</p>
-      {photo.location && <p class="text-sm text-muted mb-1">{photo.location}</p>}
-      <p class="text-sm text-muted">{photo.caption}</p>
     </div>
   </div>
 </BaseLayout>
