@@ -6,7 +6,7 @@ photos:
   - src: ../../assets/photos/together/together-at-the-beach.jpg
     date: "2024"
     caption: "Golden hour at the shore"
-  - src: ../../assets/photos/together/mt-kenya-guides.jpeg
+  - src: ../../assets/photos/together/guides-mt-kenya.jpg
     date: "2024"
     caption: "Our guides on Mount Kenya"
   - src: ../../assets/photos/together/bulgarian-bar.jpg
