@@ -4,8 +4,9 @@ cover: ../../assets/photos/one/lonely-christmas.jpg
 order: 2
 photos:
   - src: ../../assets/photos/one/lonely-christmas.jpg
-    date: ""
-    caption: ""
+    date: "December 2025"
+    location: "Sofia, Bulgaria"
+    caption: "A Lonely Christmas"
   - src: ../../assets/photos/one/dog-in-seoul.jpg
     date: ""
     caption: ""

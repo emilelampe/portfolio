@@ -12,7 +12,8 @@
       "WebFetch(domain:nemanjamitic.com)",
       "WebFetch(domain:jankraus.net)",
       "WebFetch(domain:www.launchfa.st)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(find:*)"
     ]
   }
 }

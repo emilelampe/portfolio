@@ -96,7 +96,14 @@ const optimizedMain = await getImage({
       <div class="hidden md:flex flex-col w-64 border-l border-white/5 p-6">
         <div class="flex-1">
           <p class="label mb-2">Date</p>
-          <p class="mb-6">{photo.date}</p>
+          <p class="text-muted mb-6">{photo.date}</p>
+
+          {photo.location && (
+            <>
+              <p class="label mb-2">Location</p>
+              <p class="text-muted mb-6">{photo.location}</p>
+            </>
+          )}
 
           <p class="label mb-2">Caption</p>
           <p class="text-muted leading-relaxed">{photo.caption}</p>
@@ -149,7 +156,8 @@ const optimizedMain = await getImage({
 
     <!-- Mobile info bar (shown below thumbnails on mobile) -->
     <div class="md:hidden flex-shrink-0 border-t border-white/5 p-4">
-      <p class="label mb-1">{photo.date}</p>
+      <p class="text-sm text-muted mb-1">{photo.date}</p>
+      {photo.location && <p class="text-sm text-muted mb-1">{photo.location}</p>}
       <p class="text-sm text-muted">{photo.caption}</p>
     </div>
   </div>

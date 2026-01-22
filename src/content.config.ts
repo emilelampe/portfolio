@@ -22,6 +22,7 @@ const albums = defineCollection({
         z.object({
           src: image(),
           date: z.string(),
+          location: z.string().optional(),
           caption: z.string(),
         })
       ),
