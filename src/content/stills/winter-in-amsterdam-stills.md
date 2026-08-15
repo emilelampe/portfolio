@@ -1,6 +1,11 @@
 ---
-filmSlug: "winter-in-amsterdam"
+filmSlug: "my-first-film"
 images:
+  - ../../assets/stills/still-walking-away-on-beach.png
+  - ../../assets/stills/still-person-biking-by.png
+  - ../../assets/stills/still-people-walking-on-beach.jpg
+  - ../../assets/stills/still-two-people-on-beach.png
+
   - ../../assets/stills/still-beach-boulevard-night_1.7.1.jpg
   - ../../assets/stills/still-boat-water.jpg
   - ../../assets/stills/still-rali-boat.jpg
